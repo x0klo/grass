@@ -17,8 +17,8 @@ void test_scan_w()
     FILE *program = fopen("test/sample/test/w.txt", "r");
     set_lexer(program);
     Token *token = get_token();
-    cut_assert(token->type == SMALL_W);
-    cut_assert(token->count == 1);
+    cut_assert_true(token->type == SMALL_W);
+    cut_assert_true(token->count == 1);
 }
 
 void test_scan_W()
@@ -26,6 +26,6 @@ void test_scan_W()
     FILE *program = fopen("test/sample/test/W.txt", "r");
     set_lexer(program);
     Token *token = get_token();
-    cut_assert(token->type == LARGE_W);
-    cut_assert(token->count == 1);
+    cut_assert_true(token->type == LARGE_W);
+    cut_assert_true(token->count == 1);
 }
