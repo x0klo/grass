@@ -2,7 +2,14 @@
 
 #include <stdio.h>
 
+typedef enum {
+    SMALL_W,
+    LARGE_W
+} TYPE;
+
 typedef struct {
+    TYPE type;
+    int  count;
 } Token;
 
 void set_lexer(FILE *program);
