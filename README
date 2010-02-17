@@ -1,0 +1,5 @@
+grassのC実装
+
+$ ./autogen.sh
+$ ./configure
+$ make
