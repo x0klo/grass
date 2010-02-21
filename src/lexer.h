@@ -4,11 +4,12 @@
 
 typedef enum {
     SMALL_W,
-    LARGE_W
-} TYPE;
+    LARGE_W,
+    SMALL_V
+} Type;
 
 typedef struct {
-    TYPE type;
+    Type type;
     int  count;
 } Token;
 

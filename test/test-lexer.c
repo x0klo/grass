@@ -4,6 +4,9 @@
 #include <stdio.h>
 
 void test_scan_null();
+void test_scan_w();
+void test_scan_W();
+void test_scan_v();
 
 void test_scan_null()
 {
@@ -27,5 +30,14 @@ void test_scan_W()
     set_lexer(program);
     Token *token = get_token();
     cut_assert_true(token->type == LARGE_W);
+    cut_assert_true(token->count == 1);
+}
+
+void test_scan_v()
+{
+    FILE *program = fopen("test/sample/test/v.txt", "r");
+    set_lexer(program);
+    Token *token = get_token();
+    cut_assert_true(token->type == SMALL_V);
     cut_assert_true(token->count == 1);
 }

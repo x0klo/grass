@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 static Token *new_token();
+static void set_token(Token *token, Type type, int count);
 
 static FILE *program;
 
@@ -18,21 +19,28 @@ Token *get_token()
 
     c = fgetc(program);
     if(c == EOF) {
-        return NULL;
+        token = NULL;
     }
     else if(c == 'w') {
-        token->type = SMALL_W;
-        token->count = 1;
-        return token;
+        set_token(token, SMALL_W, 1);
     }
     else if(c == 'W') {
-        token->type = LARGE_W;
-        token->count = 1;
-        return token;
+        set_token(token, LARGE_W, 1);
     }
+    else if(c == 'v') {
+        set_token(token, SMALL_V, 1);
+    }
+
+    return token;
 }
 
 static Token *new_token()
 {
     return malloc(sizeof(Token));
+}
+
+static void set_token(Token *token, Type type, int count)
+{
+    token->type = type;
+    token->count = count;
 }
