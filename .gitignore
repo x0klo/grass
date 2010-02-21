@@ -3,3 +3,5 @@
 *.lo
 *.la
 autom4te.cache/
+.deps
+.libs
