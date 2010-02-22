@@ -3,9 +3,11 @@
 #include <stdio.h>
 
 typedef enum {
+    END_OF_FILE,
     SMALL_W,
     LARGE_W,
-    SMALL_V
+    SMALL_V,
+    OTHER_CHARACTER
 } Type;
 
 typedef struct {

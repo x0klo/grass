@@ -16,10 +16,10 @@ void set_lexer(FILE *p)
 Token *get_token()
 {
     int c;
-    int first_c;
     Type type;
+    Type first_type;
     int count;
-    Token *token = new_token();
+    Token *token;
 
     count = 1;
     c = fgetc(program);
@@ -27,18 +27,25 @@ Token *get_token()
         token = NULL;
     }
     else {
-        first_c = c;
-        type = get_type(c);
+        token = new_token();
+        first_type = get_type(c);
         do {
             c = fgetc(program);
-            if(c == first_c) {
+            type = get_type(c);
+            if(type == OTHER_CHARACTER) {
+                continue;
+            }
+
+            if(type == first_type) {
                 count++;
             }
             else {
-                ungetc(c, program);
+                if(c != EOF) {
+                    ungetc(c, program);
+                }
             }
-        } while(c == first_c);
-        set_token(token, type, count);
+        } while(type == first_type && c != EOF);
+        set_token(token, first_type, count);
     }
 
     return token;
@@ -57,13 +64,19 @@ static void set_token(Token *token, Type type, int count)
 
 static Type get_type(int c)
 {
-    if(c == 'w') {
+    if(c == EOF) {
+        return END_OF_FILE;
+    }
+    else if(c == 'w') {
         return SMALL_W;
     }
     else if(c == 'W') {
         return LARGE_W;
     }
-    else {
+    else if(c == 'v') {
         return SMALL_V;
+    }
+    else {
+        return OTHER_CHARACTER;
     }
 }
