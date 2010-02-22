@@ -4,7 +4,9 @@
 
 static Token *new_token();
 static void set_token(Token *token, Type type, int count);
-static Type get_type(int c);
+static Type char2type(int c);
+static int type2char(Type t);
+static Type get_type();
 
 static FILE *program;
 
@@ -15,36 +17,28 @@ void set_lexer(FILE *p)
 
 Token *get_token()
 {
-    int c;
     Type type;
     Type first_type;
     int count;
     Token *token;
 
-    count = 1;
-    c = fgetc(program);
-    if(c == EOF) {
+    type = get_type();
+    if(type == END_OF_FILE) {
         token = NULL;
     }
     else {
+        count = 1;
         token = new_token();
-        first_type = get_type(c);
+        first_type = type;
         do {
-            c = fgetc(program);
-            type = get_type(c);
-            if(type == OTHER_CHARACTER) {
-                continue;
-            }
-
+            type = get_type();
             if(type == first_type) {
                 count++;
             }
-            else {
-                if(c != EOF) {
-                    ungetc(c, program);
-                }
+            else if(type != END_OF_FILE) {
+                ungetc( type2char(type), program);
             }
-        } while(type == first_type && c != EOF);
+        } while(type == first_type && type != END_OF_FILE);
         set_token(token, first_type, count);
     }
 
@@ -62,7 +56,7 @@ static void set_token(Token *token, Type type, int count)
     token->count = count;
 }
 
-static Type get_type(int c)
+static Type char2type(int c)
 {
     if(c == EOF) {
         return END_OF_FILE;
@@ -79,4 +73,39 @@ static Type get_type(int c)
     else {
         return OTHER_CHARACTER;
     }
+}
+
+static int type2char(Type t)
+{
+    if(t == END_OF_FILE) {
+        return EOF;
+    }
+    else if(t == SMALL_W) {
+        return 'w';
+    }
+    else if(t == LARGE_W) {
+        return 'W';
+    }
+    else if(t == SMALL_V) {
+        return 'v';
+    }
+    else {
+        return ' ';
+    }
+}
+
+static Type get_type()
+{
+    int c;
+    Type type;
+
+    do {
+        c = fgetc(program);
+        type = char2type(c);
+        if(type == OTHER_CHARACTER) {
+            continue;
+        }
+    } while(type == OTHER_CHARACTER);
+
+    return type;
 }
